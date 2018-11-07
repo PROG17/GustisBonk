@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -9,6 +10,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using GustavsBANKS.Repo;
+using GustavsBANKS.Models;
 
 namespace GustavsBANKS
 {
@@ -17,6 +20,7 @@ namespace GustavsBANKS
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            GetCustomers();
         }
 
         public IConfiguration Configuration { get; }
@@ -50,7 +54,7 @@ namespace GustavsBANKS
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
+           //app.UseCookiePolicy();
 
             app.UseMvc(routes =>
             {
@@ -59,5 +63,64 @@ namespace GustavsBANKS
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
+
+        private void GetCustomers()
+        {
+            try
+            {
+                using (StreamReader sr = new StreamReader("CustomerFile.txt"))
+                {
+                    string line;
+
+                    bool creatingCustomers = true;
+
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        if (line == "Accounts")
+                        {
+                            creatingCustomers = false;
+                            continue;
+                        }
+                            
+
+                        if (creatingCustomers)
+                        {
+                            CreateCustomer(line);
+                        }
+                        else
+                        {
+                            CreateAccount(line);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                var error = e.Message;
+            }
+        }
+
+        private void CreateCustomer(string line)
+        {
+            var InfoArray = line.Split(";");
+            BankRepository.Customers.Add(new Customer
+            {
+                CustomerId = int.Parse(InfoArray[0]),
+                Name = InfoArray[1]
+            });
+        }
+
+        private void CreateAccount(string line)
+        {
+            var InfoArray = line.Split(";");
+            BankRepository.Customers.FirstOrDefault(c => c.CustomerId == int.Parse(InfoArray[2]))
+                .Accounts.Add(new Account
+                {
+                    AccountNumber = int.Parse(InfoArray[0]),
+                    Balance = decimal.Parse(InfoArray[1])
+
+                });
+        }
+
     }
 }

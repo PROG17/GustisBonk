@@ -1,5 +1,31 @@
-﻿@{
+﻿
+@model List<Customer>
+@{
     ViewData["Title"] = "Home Page";
+
 }
+<div class="container">
+    <div class="row">
+        <div class="page-header text-center">
+            <h2>Gustavs Bonk</h2>
+            <h4>Customers</h4>
+        </div>
+    </div>
+    @foreach (var customer in Model)
+    {
+        <div class="row alert-success" style=" margin:5px;">
+            <p> Name: <b>@customer.Name</b> <br /> Id: @customer.CustomerId.</p>
+
+            <ul>
+                @foreach (var account in customer.Accounts)
+                {
+                    <li>Account number: @account.AccountNumber.<br />Balance: <b>@account.Balance</b>.kr </li>
+                }
+            </ul>
+            <hr />
+        </div>
+    }
+
+</div>
 
 
