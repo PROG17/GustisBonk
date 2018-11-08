@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using GustavsBANKS.Models;
+using GustavsBANKS.Repo;
+
 
 namespace GustavsBANKS.Controllers
 {
@@ -12,7 +14,9 @@ namespace GustavsBANKS.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            List<Customer> model = BankRepository.Customers;
+
+            return View(model);
         }
 
         public IActionResult About()
