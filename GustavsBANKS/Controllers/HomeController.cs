@@ -12,6 +12,8 @@ namespace GustavsBANKS.Controllers
 {
     public class HomeController : Controller
     {
+
+
         public IActionResult Index()
         {
             List<Customer> model = BankRepository.Customers;
@@ -19,24 +21,32 @@ namespace GustavsBANKS.Controllers
             return View(model);
         }
 
-        public IActionResult About()
+        public IActionResult Deposit()
         {
-            ViewData["Message"] = "Your application description page.";
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Deposit(TransferAmmount obj, string deposit, string withdrawal)
+        {
+            if (!string.IsNullOrEmpty(deposit))
+            {
+                ViewBag.Message = BankRepository.DepositFunds(obj);
+            }
+            if (!string.IsNullOrEmpty(withdrawal))
+            {
+                ViewBag.Message = BankRepository.WithdrawFunds(obj);
+            }
 
             return View();
         }
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
 
-            return View();
+        public IActionResult DepositFunds()
+        {
+            return RedirectToAction("Deposit", new { message = "test Message" });
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

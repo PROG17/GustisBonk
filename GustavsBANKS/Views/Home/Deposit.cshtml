@@ -1,0 +1,30 @@
+﻿@model TransferAmmount
+@{
+    ViewData["Title"] = "WithDrawl And Deposit";
+}
+
+<h2>WithDrawl or Deposit</h2>
+<div class="container">
+    <h3 class="alert-info">@ViewBag.Message</h3>
+    <form asp-action="deposit" method="post">
+        <h4>Skapa ny auction.</h4>
+        <hr />
+        <div asp-validation-summary="All" class="text-danger">
+            <div class="form-group">
+                <label asp-for="AccountNumber"></label>
+                <input asp-for="AccountNumber" required class="form-control" />
+                <span asp-validation-for="AccountNumber" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Ammount"></label>
+                <input asp-for="Ammount" required class="form-control" />
+                <span asp-validation-for="Ammount" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <button type="submit" name="deposit" value="deposit">Sätt in</button>
+                <button type="submit" name="withdrawal" value="withdrawal">Ta ut</button>
+            </div>
+        </div>
+    </form>
+</div>
+
