@@ -21,7 +21,7 @@ namespace GustavsBANKS.Repo
             if(account != null)
             {
                 account.Balance += transfer.Ammount;
-                return "Pengar insatta";
+                return $"{transfer.Ammount}.kr insatta på konto {account.AccountNumber}. Aktuellt Saldo är: {account.Balance}.kr";
             }
             return "Kontot kunde inte hittas.";               
         }
@@ -34,7 +34,7 @@ namespace GustavsBANKS.Repo
                 if (transfer.Ammount <= account.Balance)
                 {
                     account.Balance -= transfer.Ammount;
-                    return "Pengar Uttagna";
+                    return $"{transfer.Ammount}.kr uttaget från konto {account.AccountNumber}. Aktuellt Saldo är: {account.Balance}.kr";
                 }
                 return "Ej tillräckligt på kontot.";
             }
