@@ -6,16 +6,14 @@ using System.Threading.Tasks;
 
 namespace GustavsBANKS.Models
 {
-    public class Account
+    public class DepositWithrawVM
     {
-        [Required]
-        [Display(Name = "Kontonummer")]
+        [Required(ErrorMessage = "var god ange kontonummer!")]
         public int AccountNumber { get; set; }
 
-        [Required]
-        [Display(Name = "Summa")]
-        public decimal Balance { get; set; }
-
+        [Range(0.1, 1000000000000000)]
+        [Required(ErrorMessage = "var god ange summa!")]
+        public decimal Ammount { get; set; }
 
     }
 }

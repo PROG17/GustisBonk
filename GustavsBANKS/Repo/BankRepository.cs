@@ -15,7 +15,24 @@ namespace GustavsBANKS.Repo
             Customers = new List<Customer>();
         }
 
-        public static string DepositFunds(TransferAmmount transfer)
+        public static string TransferFunds(TransferVM transfer)
+        {
+            var fromAccount = FindAccount(transfer.FromAccountNumber);
+            var toAccount = FindAccount(transfer.ToAccountNumber);
+            if (fromAccount != null && toAccount != null)
+            {
+                if (transfer.Ammount <= fromAccount.Balance)
+                {
+                    fromAccount.Balance -= transfer.Ammount;
+                    toAccount.Balance += transfer.Ammount;
+                    return $"{transfer.Ammount}.kr överfört från konto {fromAccount.AccountNumber} till konto {toAccount.AccountNumber}. Aktuella Saldon är: {fromAccount.AccountNumber} : {fromAccount.Balance}.kr & {toAccount.AccountNumber} : {toAccount.Balance}.kr";
+                }
+                return "Ej tillräckligt på kontot.";
+            }
+            return "Något av kontona kunde inte hittas.";
+        }
+
+        public static string DepositFunds(DepositWithrawVM transfer)
         {
             var account = FindAccount(transfer.AccountNumber);
             if(account != null)
@@ -26,7 +43,7 @@ namespace GustavsBANKS.Repo
             return "Kontot kunde inte hittas.";               
         }
 
-        public static string WithdrawFunds(TransferAmmount transfer)
+        public static string WithdrawFunds(DepositWithrawVM transfer)
         {
             var account = FindAccount(transfer.AccountNumber);
             if (account != null)
