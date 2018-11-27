@@ -10,12 +10,48 @@ namespace bank.tests
     public class UnitTest1
     {
         [Fact]
+        public void VerifyTransferWhenInsufficientFunds()
+        {
+            CreateCustommer();
+            var transfer = new TransferVM
+            {
+                FromAccountNumber = 1002,
+                ToAccountNumber = 1003,
+                Ammount = 1001
+            };
+
+            BankRepository.TransferFunds(transfer);
+            decimal expected = 1000;
+            decimal actual = BankRepository.Customers.FirstOrDefault(x => x.CustomerId == 1002).Accounts.FirstOrDefault().Balance;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void VerifyTransfer()
+        {
+            CreateCustommer();
+            var transfer = new TransferVM
+            {
+                FromAccountNumber = 1002,
+                ToAccountNumber = 1003,
+                Ammount = 1000
+            };
+
+            BankRepository.TransferFunds(transfer);
+            decimal expected = 2000;
+            decimal actual = BankRepository.Customers.FirstOrDefault(x => x.CustomerId == 1002).Accounts.FirstOrDefault().Balance;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
         public void DepositTest()
         {
             CreateCustommer();
-            var deposit = new TransferAmmount
+            var deposit = new DepositWithrawVM
             {
-                AccountNumber = 100120362,
+                AccountNumber = 1002,
                 Ammount = 500
             };
 
@@ -32,9 +68,9 @@ namespace bank.tests
         public void WithdrawalTest()
         {
             CreateCustommer();
-            var withdrawal = new TransferAmmount
+            var withdrawal = new DepositWithrawVM
             {
-                AccountNumber = 100120362,
+                AccountNumber = 1002,
                 Ammount = 500
             };
 
@@ -50,9 +86,9 @@ namespace bank.tests
         public void InsufficinetFundsTest()
         {
             CreateCustommer();
-            var withdrawal = new TransferAmmount
+            var withdrawal = new DepositWithrawVM
             {
-                AccountNumber = 100120362,
+                AccountNumber = 1002,
                 Ammount = 1001
             };
 
@@ -76,16 +112,22 @@ namespace bank.tests
                 {
                     CustomerId = 1001,
                     Name = "Gustav Cleveman",
-                    Accounts = CreateAccounts()
+                    Accounts = CreateAccounts(1)
+                },
+                new Customer
+                {
+                    CustomerId = 1002,
+                    Name = "Alexander Arvanitis",
+                    Accounts = CreateAccounts(2)
                 }
             };
         }
 
-        private List<Account> CreateAccounts()
+        private List<Account> CreateAccounts(int nbr)
         {
             var account = new Account
             {
-                AccountNumber = 100120362,
+                AccountNumber = 1001 + nbr,
                 Balance = 1000
             };
 

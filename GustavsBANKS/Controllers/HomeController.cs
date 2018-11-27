@@ -21,13 +21,26 @@ namespace GustavsBANKS.Controllers
             return View(model);
         }
 
+        public IActionResult Transfer()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Transfer(TransferVM obj)
+        {
+            ViewBag.Message = BankRepository.TransferFunds(obj);
+
+            return View();
+        }
+
         public IActionResult Deposit()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Deposit(TransferAmmount obj, string deposit, string withdrawal)
+        public IActionResult Deposit(DepositWithrawVM obj, string deposit, string withdrawal)
         {
             if (!string.IsNullOrEmpty(deposit))
             {

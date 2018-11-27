@@ -1,0 +1,33 @@
+﻿@model TransferVM
+@{
+    ViewData["Title"] = "Transfer";
+}
+
+<h2>Överföring</h2>
+<div class="container">
+    <h3 class="alert-info">@ViewBag.Message</h3>
+    <form asp-action="transfer" method="post">
+        <h4>Skapa ny auction.</h4>
+        <hr />
+        <div asp-validation-summary="All" class="text-danger">
+            <div class="form-group">
+                <label>Från konto</label>
+                <input asp-for="FromAccountNumber" required class="form-control" />
+                <span asp-validation-for="FromAccountNumber" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label>Till konto</label>
+                <input asp-for="ToAccountNumber" required class="form-control" />
+                <span asp-validation-for="ToAccountNumber" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label>Belopp</label>
+                <input asp-for="Ammount" required class="form-control" />
+                <span asp-validation-for="Ammount" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <button type="submit" name="withdrawal" value="withdrawal">För över</button>
+            </div>
+        </div>
+    </form>
+</div>
